@@ -92,7 +92,7 @@ int main() {
   return 0;
 }
 
-// --Findind the Terminal Width -- Helps in centering the text
+// -------- Findind the Terminal Width -- Helps in centering the text
 // -----------
 int get_terminal_width() {
 #ifdef _WIN32
@@ -284,12 +284,12 @@ int get_tomorrow_index() {
 void read_interactive(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int *days) {
   printf(YELLOW "Enter the number of days (max %d): " RESET, MAX_DAYS);
   scanf("%d", days);
-  getchar();
+  getchar(); // Consume the newline character
 
   for (int i = 0; i < *days; i++) {
-    printf(GREEN "Enter 
+    printf(GREEN "Enter subjects for day %d (comma-separated): " RESET, i + 1);
     fgets(timetable[i], MAX_LINE_LENGTH, stdin);
-    strtok(timetable[i], "\n");
+    strtok(timetable[i], "\n"); // Remove newline character
   }
 }
 
