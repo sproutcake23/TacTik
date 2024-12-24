@@ -1,16 +1,18 @@
 // TODO: sort the loading screen that you have there/.
 
+// -------- Preprocessor -----------
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>   // For date handling
-#include <unistd.h> // For sleep function in animations
+#include <time.h>
+#include <unistd.h>
 #ifdef _WIN32
-#include <windows.h> // For terminal dimensions (Windows systems)
+#include <windows.h>
 #else
-#include <sys/ioctl.h> // For terminal dimensions (Unix-like systems)
+#include <sys/ioctl.h>
 #endif
 
+// -------- Terminal Color Code -----------
 #define RESET "\x1b[0m"
 #define CYAN "\x1b[36m"
 #define GREEN "\x1b[32m"
@@ -18,11 +20,12 @@
 #define RED "\x1b[31m"
 #define BLUE "\x1b[34m"
 
+// -------- Inital Values regarding the Subjects and Days -----------
 #define MAX_DAYS 7
 #define MAX_SUBJECTS 8
 #define MAX_LINE_LENGTH 100
 
-// Function Prototypes
+// -------- Function Declaration -----------
 void print_welcome();
 void display_loading_screen();
 void animated_text(const char *text, int center);
@@ -40,6 +43,7 @@ void display_menu();
 void about_us();
 void exit_program();
 
+// -------- Main Function -----------
 int main() {
   char timetable[MAX_DAYS][MAX_LINE_LENGTH];
   int days = 0;
@@ -51,8 +55,8 @@ int main() {
     display_menu();
     printf("\n");
     printf(YELLOW "Your choice: " RESET);
-    scanf("%d", &choice);
-    getchar(); // Consume the newline character
+
+    getchar();
 
     switch (choice) {
     case 1:
@@ -62,7 +66,7 @@ int main() {
       char filename[50];
       printf(GREEN "Please enter the file name: " RESET);
       fgets(filename, sizeof(filename), stdin);
-      strtok(filename, "\n"); // Remove newline
+      strtok(filename, "\n");
       read_file_mode(filename, timetable, &days);
     } break;
     case 3:
@@ -88,12 +92,12 @@ int main() {
   return 0;
 }
 
-// Function Definitions
-
+// --Findind the Terminal Width -- Helps in centering the text
+// -----------
 int get_terminal_width() {
 #ifdef _WIN32
   CONSOLE_SCREEN_BUFFER_INFO csbi;
-  int columns = 80; // Default width
+  int columns = 80;
   if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
     columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
   }
@@ -105,6 +109,8 @@ int get_terminal_width() {
 #endif
 }
 
+// -------- Centering the text/string that is given in the argument of the
+// function -----------
 void center_text(const char *text) {
   int width = get_terminal_width();
   int text_len = strlen(text);
@@ -114,6 +120,7 @@ void center_text(const char *text) {
   printf("%s\n", text);
 }
 
+// -------- Printing the Logo -----------
 void logo() {
   printf(YELLOW);
   center_text("      _---~~(~~-_.");
@@ -132,8 +139,9 @@ void logo() {
   printf(RESET);
 }
 
+// -------- Quote Generator -----------
 const char *welcome_quote() {
-  // Array of inspiring quotes
+
   const char *quotes[] = {
       "Success is the result of preparation, hard work, and learning from "
       "failure.",
@@ -158,17 +166,15 @@ const char *welcome_quote() {
       "Planning is bringing the future into the present, so you can take "
       "action now."};
 
-  // Determine the size of the quotes array
   int num_quotes = sizeof(quotes) / sizeof(quotes[0]);
 
-  // Generate a random index
-  srand(time(NULL)); // Seed the random number generator
+  srand(time(NULL));
   int random_index = rand() % num_quotes;
 
-  // Print the random quote
   return quotes[random_index];
 }
 
+// -------- Welcome Screen -----------
 void print_welcome() {
   printf("\n ");
   printf("\n");
@@ -179,11 +185,11 @@ void print_welcome() {
   printf("\n ");
   printf("\n");
   printf(CYAN);
-  // center_text("=============================================");
+
   printf(" ");
   center_text("      * WELCOME TO TOMORROW'S PRIORITY *     ");
   center_text("=============================================");
-  printf(RESET);
+
   printf("\n");
   center_text(
       "       Tomorrow's Priority is a thoughtfully designed tool "
@@ -212,6 +218,7 @@ void print_welcome() {
   printf(RESET);
 }
 
+// -------- Displaying the Choices in the Welcome Screen -----------
 void display_menu() {
   printf(GREEN "\nPlease choose an option:\n" RESET);
   printf(" ");
@@ -222,6 +229,7 @@ void display_menu() {
   printf(" ");
 }
 
+// -------- Dislay the loading screen animation -----------
 void display_loading_screen() {
   const char *loading_message = "Loading Tomorrow's Priority Application";
   const char *spinner = "|/-\\";
@@ -242,11 +250,12 @@ void display_loading_screen() {
     }
     printf("] %c", spinner[i / 2 % 4]);
     fflush(stdout);
-    usleep(20000); // n micro seconds
+    usleep(20000);
   }
   printf("\n" RESET);
 }
 
+// -------- Typing Text Animation -----------
 void animated_text(const char *text, int center) {
   if (center) {
     int width = get_terminal_width();
@@ -258,30 +267,33 @@ void animated_text(const char *text, int center) {
   while (*text) {
     putchar(*text++);
     fflush(stdout);
-    usleep(50000); // 50ms delay for each character
+    usleep(50000);
   }
   printf("\n");
 }
 
+// -------- Findind the Tomorrow's Index -----------
 int get_tomorrow_index() {
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
 
-  return (tm.tm_wday) % 7; // tm_wday: 0 (Sunday) to 6 (Saturday)
+  return (tm.tm_wday) % 7;
 }
 
+// --------- Interactive Mode Code -----------
 void read_interactive(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int *days) {
   printf(YELLOW "Enter the number of days (max %d): " RESET, MAX_DAYS);
   scanf("%d", days);
-  getchar(); // Consume the newline character
+  getchar();
 
   for (int i = 0; i < *days; i++) {
-    printf(GREEN "Enter subjects for day %d (comma-separated): " RESET, i + 1);
+    printf(GREEN "Enter 
     fgets(timetable[i], MAX_LINE_LENGTH, stdin);
-    strtok(timetable[i], "\n"); // Remove newline character
+    strtok(timetable[i], "\n");
   }
 }
 
+// --------- File Reading Mode -----------
 void read_file_mode(char filename[], char timetable[MAX_DAYS][MAX_LINE_LENGTH],
                     int *days) {
   FILE *file = fopen(filename, "r");
@@ -293,7 +305,7 @@ void read_file_mode(char filename[], char timetable[MAX_DAYS][MAX_LINE_LENGTH],
   char line[MAX_LINE_LENGTH];
   *days = 0;
   while (fgets(line, sizeof(line), file) && *days < MAX_DAYS) {
-    strtok(line, "\n"); // Remove newline character
+    strtok(line, "\n");
     strncpy(timetable[*days], line, MAX_LINE_LENGTH - 1);
     timetable[*days][MAX_LINE_LENGTH - 1] = '\0';
     (*days)++;
@@ -302,15 +314,16 @@ void read_file_mode(char filename[], char timetable[MAX_DAYS][MAX_LINE_LENGTH],
   fclose(file);
 }
 
+// --------- prioritize subject algorithm - (today, yesterday) is compared with
+// (tomorrow and day-after-tomorrow)-----------
 void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
                          int tomorrow_index) {
   char subjects[MAX_SUBJECTS][50];
-  int forward_counts[MAX_SUBJECTS] = {0};  // Upcoming days
-  int backward_counts[MAX_SUBJECTS] = {0}; // Previous and today
+  int forward_counts[MAX_SUBJECTS] = {0};
+  int backward_counts[MAX_SUBJECTS] = {0};
   int difficulty[MAX_SUBJECTS];
   int subject_count = 0;
 
-  // Parse subjects for tomorrow and the day after (forward checking)
   for (int day_offset = 0; day_offset < 2; day_offset++) {
     int day_index = (tomorrow_index + day_offset) % days;
     char *token = strtok(timetable[day_index], ", ");
@@ -333,7 +346,6 @@ void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
     }
   }
 
-  // Check subject appearances today and in the last two days
   for (int day_offset = 0; day_offset <= 2; day_offset++) {
     int day_index = (tomorrow_index - day_offset + days) % days;
     char *token = strtok(timetable[day_index], ", ");
@@ -348,14 +360,12 @@ void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
     }
   }
 
-  // Display preliminary priorities
   animated_text(GREEN "\nCalculating initial priorities:\n" RESET, 1);
   for (int i = 0; i < subject_count; i++) {
     printf(YELLOW "#%d %s: " RESET, i + 1, subjects[i]);
     printf("Upcoming: %d, Recent: %d\n", forward_counts[i], backward_counts[i]);
   }
 
-  // Allow user to input difficulty ranking
   printf(GREEN
          "\nRank the difficulty of the subjects (1=Easy, 10=Hard):\n" RESET);
   for (int i = 0; i < subject_count; i++) {
@@ -363,13 +373,11 @@ void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
     scanf("%d", &difficulty[i]);
   }
 
-  // Calculate final scores and sort in descending order
   int scores[MAX_SUBJECTS];
   for (int i = 0; i < subject_count; i++) {
     scores[i] = forward_counts[i] * 2 - backward_counts[i] + difficulty[i];
   }
 
-  // Sort subjects by scores in descending order
   for (int i = 0; i < subject_count - 1; i++) {
     for (int j = i + 1; j < subject_count; j++) {
       if (scores[i] < scores[j]) {
@@ -397,7 +405,6 @@ void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
     }
   }
 
-  // Display final priorities with suggestions
   animated_text(GREEN "\nFinal Priorities with Recommendations:\n" RESET, 1);
   for (int i = 0; i < subject_count; i++) {
     printf(YELLOW "#%d %s (Score = %d): " RESET, i + 1, subjects[i], scores[i]);
@@ -411,10 +418,11 @@ void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
     }
   }
 }
+
+// --------- About Us and Documentation Code -----------
 void about_us() {
   printf("\n");
 
-  // Section Header
   printf(CYAN "What is Tomorrow's Priority?\n" RESET);
   printf(CYAN "===========================\n\n" RESET);
   printf("Tomorrow's Priority is a thoughtfully designed tool crafted to help "
@@ -431,7 +439,6 @@ void about_us() {
   printf("Tomorrow's Priority is more than just a tool—it's your smart study "
          "companion.\n\n");
 
-  // Section Header
   printf(CYAN "Who is it Useful For?\n" RESET);
   printf(CYAN "=====================\n\n" RESET);
   printf("Tomorrow's Priority is perfect for:\n");
@@ -451,7 +458,6 @@ void about_us() {
          "all levels, helping them align their study habits with their "
          "academic goals.\n\n");
 
-  // Section Header
   printf(CYAN "The Uses of Spaced Repetition and SMART Goals\n" RESET);
   printf(CYAN "============================================\n\n" RESET);
   printf("- " YELLOW "Spaced Repetition:" RESET
@@ -471,7 +477,6 @@ void about_us() {
   printf("Together, these techniques bring science-backed study strategies to "
          "your fingertips.\n\n");
 
-  // Section Header
   printf(CYAN "About the Team\n" RESET);
   printf(CYAN "==============\n\n" RESET);
   printf("Tomorrow's Priority was developed with passion by a team dedicated "
@@ -492,6 +497,8 @@ void about_us() {
       "Let Tomorrow's Priority simplify your study process so you can focus on "
       "success. Together, let's build a brighter and smarter tomorrow!\n\n");
 }
+
+// --------- Exit the Program Code -----------
 void exit_program() {
   display_loading_screen();
   printf(GREEN "\nThank you for using Tomorrow's Priority!\n" RESET);
