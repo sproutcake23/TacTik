@@ -27,10 +27,10 @@
 void print_welcome();
 void display_loading_screen();
 void animated_text(const char *text, int center);
-void read_interactive(char timetable[max_days][max_line_length], int *days);
-void read_file_mode(char filename[], char timetable[max_days][max_line_length],
+void read_interactive(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int *days);
+void read_file_mode(char filename[], char timetable[MAX_DAYS][MAX_LINE_LENGTH],
                     int *days);
-void prioritize_subjects(char timetable[max_days][max_line_length], int days,
+void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
                          int tomorrow_index);
 
 int count_occurrences(const char *line, const char *subject);
@@ -62,7 +62,8 @@ int main() {
       break;
     case 2: {
       char filename[50];
-      printf(green "please enter the file name: " reset);
+      printf(GREEN
+             "Please enter the custom planner file name (with .txt): " RESET);
       fgets(filename, sizeof(filename), stdin);
       strtok(filename, "\n");
       read_file_mode(filename, timetable, &days);
@@ -74,7 +75,7 @@ int main() {
       exit_program();
       return 0;
     default:
-      printf(red "invalid choice. please try again." reset "\n");
+      printf(RED "Invalid choice. Please try again." RESET "\n");
       break;
     }
 
@@ -83,7 +84,7 @@ int main() {
       if (tomorrow_index >= 0 && tomorrow_index < days) {
         prioritize_subjects(timetable, days, tomorrow_index);
       } else {
-        printf(red "invalid day index. returning to the menu." reset "\n");
+        printf(RED "Invalid day index. Returning to the menu." RESET "\n");
       }
     }
   }
