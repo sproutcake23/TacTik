@@ -438,7 +438,7 @@ void about_us() {
          "prepared and focused on what matters most.\n\n");
   printf("with a sleek ascii-art ui, engaging animations, and intelligent "
          "algorithms working behind the scenes, ");
-  printf("tactik is more than just a tool—it's your smart study "
+  printf("tactik is more than just a tool — it's your smart study "
          "companion.\n\n");
 
   printf(cyan "who is it useful for?\n" reset);
