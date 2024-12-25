@@ -535,7 +535,6 @@ void about_us() {
 
 // --------- exit the program code -----------
 void exit_program() {
-  display_loading_screen();
   printf(GREEN "\nThank you for using TacTik!\n" RESET);
   printf("We hope it helps you manage your studies effectively. Have a great "
          "day ahead!\n");
