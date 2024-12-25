@@ -11,16 +11,16 @@
 #endif
 
 // -------- terminal color code -----------
-#define reset "\x1b[0m"
-#define cyan "\x1b[36m"
-#define yellow "\x1b[33m"
-#define red "\x1b[31m"
-#define blue "\x1b[34m"
+#define RESET "\x1b[0m"
+#define CYAN "\x1b[36m"
+#define GREEN "\x1b[32m"
+#define YELLOW "\x1b[33m"
+#define RED "\x1b[31m"
+#define BLUE "\x1b[34m"
 
 // -------- inital values regarding the subjects and days -----------
-#define max_days 7
-#define max_subjects 8
-#define max_line_length 100
+#define MAX_DAYS 7
+#define MAX_SUBJECTS 8
 #define MAX_LINE_LENGTH 100
 
 // -------- function declaration -----------
