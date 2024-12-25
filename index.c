@@ -92,7 +92,7 @@ int main() {
   return 0;
 }
 
-// -------- Findind the Terminal Width -- Helps in centering the text
+// -------- Finding the Terminal Width -- Helps in centering the text
 // -----------
 int get_terminal_width() {
 #ifdef _WIN32
@@ -229,7 +229,7 @@ void display_menu() {
   printf(" ");
 }
 
-// -------- Dislay the loading screen animation -----------
+// -------- Display the loading screen animation -----------
 void display_loading_screen() {
   const char *loading_message = "Loading TacTik Application";
   const char *spinner = "|/-\\";
@@ -272,7 +272,7 @@ void animated_text(const char *text, int center) {
   printf("\n");
 }
 
-// -------- Findind the Tomorrow's Index -----------
+// -------- Finding the Tomorrow's Index -----------
 int get_tomorrow_index() {
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
