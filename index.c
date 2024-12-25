@@ -43,7 +43,7 @@ void exit_program();
 
 // -------- main function -----------
 int main() {
-  char timetable[max_days][max_line_length];
+  char timetable[MAX_DAYS][MAX_LINE_LENGTH];
   int days = 0;
   int choice;
 
@@ -52,7 +52,7 @@ int main() {
   while (1) {
     display_menu();
 
-    printf(yellow "your choice: " reset);
+    printf(YELLOW "Your Choice: " RESET);
     scanf("%d", &choice);
     getchar();
 
