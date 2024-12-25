@@ -282,7 +282,7 @@ int get_tomorrow_index() {
 
 // --------- Interactive Mode Code -----------
 void read_interactive(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int *days) {
-  printf(YELLOW "Enter the number of days (max %d): " RESET, MAX_DAYS);
+  printf(YELLOW "Enter the number of days (max %d, min 2): " RESET, MAX_DAYS);
   scanf("%d", days);
   getchar();
 
