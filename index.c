@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#ifdef _win32
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <sys/ioctl.h>
