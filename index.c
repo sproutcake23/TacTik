@@ -48,44 +48,46 @@ int main() {
   char timetable[MAX_DAYS][MAX_LINE_LENGTH];
   int days = 0;
   int choice;
-  int opened = 0;
+
+  print_welcome(); // Display welcome screen only once at the start
 
   while (1) {
-    print_welcome();
-    display_menu();
-    printf("\n");
+    display_menu(); // Show menu every time the loop begins
+
     printf(YELLOW "Your choice: " RESET);
     scanf("%d", &choice);
-    getchar();
+    getchar(); // Consume the newline character
 
     switch (choice) {
     case 1:
-      read_interactive(timetable, &days);
+      read_interactive(timetable, &days); // Interactive mode
       break;
     case 2: {
       char filename[50];
       printf(GREEN "Please enter the file name: " RESET);
       fgets(filename, sizeof(filename), stdin);
-      strtok(filename, "\n");
-      read_file_mode(filename, timetable, &days);
+      strtok(filename, "\n");                     // Remove newline
+      read_file_mode(filename, timetable, &days); // File mode
     } break;
     case 3:
-      about_us();
-      continue;
+      about_us(); // About Us
+      break;
     case 4:
-      exit_program();
+      exit_program(); // Exit with loading screen
       return 0;
     default:
       printf(RED "Invalid choice. Please try again." RESET "\n");
-      continue;
+      break;
     }
 
-    int tomorrow_index = get_tomorrow_index();
-
-    if (tomorrow_index >= 0 && tomorrow_index < days) {
-      prioritize_subjects(timetable, days, tomorrow_index);
-    } else {
-      printf(RED "Invalid day index. Returning to the menu." RESET "\n");
+    // If priority calculation needed after modes
+    if (choice == 1 || choice == 2) {
+      int tomorrow_index = get_tomorrow_index();
+      if (tomorrow_index >= 0 && tomorrow_index < days) {
+        prioritize_subjects(timetable, days, tomorrow_index);
+      } else {
+        printf(RED "Invalid day index. Returning to the menu." RESET "\n");
+      }
     }
   }
 
@@ -282,7 +284,7 @@ int get_tomorrow_index() {
 
 // --------- Interactive Mode Code -----------
 void read_interactive(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int *days) {
-  printf(YELLOW "Enter the number of days (max %d, min 2): " RESET, MAX_DAYS);
+  printf(YELLOW "Enter the number of days (max %d): " RESET, MAX_DAYS);
   scanf("%d", days);
   getchar();
 
