@@ -318,105 +318,56 @@ void read_file_mode(char filename[], char timetable[max_days][max_line_length],
 
 // --------- prioritize subject algorithm - (today, yesterday) is compared with
 // (tomorrow and day-after-tomorrow)-----------
-void prioritize_subjects(char timetable[max_days][max_line_length], int days,
+void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
                          int tomorrow_index) {
-  char subjects[max_subjects][50];
-  int forward_counts[max_subjects] = {0};
-  int backward_counts[max_subjects] = {0};
-  int difficulty[max_subjects];
+  char subjects[MAX_SUBJECTS][50];
+  int scores[MAX_SUBJECTS] = {0};
   int subject_count = 0;
 
-  for (int day_offset = 0; day_offset < 2; day_offset++) {
-    int day_index = (tomorrow_index + day_offset) % days;
-    char *token = strtok(timetable[day_index], ", ");
-    while (token != null) {
-      int found = 0;
-      for (int i = 0; i < subject_count; i++) {
-        if (strcmp(subjects[i], token) == 0) {
-          forward_counts[i]++;
-          found = 1;
-          break;
-        }
-      }
-      if (!found) {
-        strncpy(subjects[subject_count], token,
-                sizeof(subjects[subject_count]));
-        forward_counts[subject_count] = 1;
-        subject_count++;
-      }
-      token = strtok(null, ", ");
-    }
-  }
-
-  for (int day_offset = 0; day_offset <= 2; day_offset++) {
-    int day_index = (tomorrow_index - day_offset + days) % days;
-    char *token = strtok(timetable[day_index], ", ");
-    while (token != null) {
-      for (int i = 0; i < subject_count; i++) {
-        if (strcmp(subjects[i], token) == 0) {
-          backward_counts[i]++;
-          break;
-        }
-      }
-      token = strtok(null, ", ");
-    }
-  }
-
-  animated_text(green "\ncalculating initial priorities:\n" reset, 1);
-  for (int i = 0; i < subject_count; i++) {
-    printf(yellow "#%d %s: " reset, i + 1, subjects[i]);
-    printf("upcoming: %d, recent: %d\n", forward_counts[i], backward_counts[i]);
-  }
-
-  printf(green
-         "\nrank the difficulty of the subjects (1=easy, 10=hard):\n" reset);
-  for (int i = 0; i < subject_count; i++) {
-    printf(yellow "%s: " reset, subjects[i]);
-    scanf("%d", &difficulty[i]);
-  }
-
-  int scores[max_subjects];
-  for (int i = 0; i < subject_count; i++) {
-    scores[i] = forward_counts[i] * 2 - backward_counts[i] + difficulty[i];
-  }
-
-  for (int i = 0; i < subject_count - 1; i++) {
-    for (int j = i + 1; j < subject_count; j++) {
-      if (scores[i] < scores[j]) {
-        int temp_score = scores[i];
-        scores[i] = scores[j];
-        scores[j] = temp_score;
-
-        char temp_subject[50];
-        strncpy(temp_subject, subjects[i], sizeof(temp_subject));
-        strncpy(subjects[i], subjects[j], sizeof(subjects[i]));
-        strncpy(subjects[j], temp_subject, sizeof(subjects[j]));
-
-        int temp_count = forward_counts[i];
-        forward_counts[i] = forward_counts[j];
-        forward_counts[j] = temp_count;
-
-        temp_count = backward_counts[i];
-        backward_counts[i] = backward_counts[j];
-        backward_counts[j] = temp_count;
-
-        temp_count = difficulty[i];
-        difficulty[i] = difficulty[j];
-        difficulty[j] = temp_count;
+  char *token = strtok(timetable[tomorrow_index], ", ");
+  while (token != NULL) {
+    int found = 0;
+    for (int i = 0; i < subject_count; i++) {
+      if (strcmp(subjects[i], token) == 0) {
+        found = 1;
+        scores[i]++;
+        break;
       }
     }
+    if (!found) {
+      strncpy(subjects[subject_count], token, sizeof(subjects[subject_count]));
+      scores[subject_count] = 1;
+      subject_count++;
+    }
+    token = strtok(NULL, ", ");
   }
 
-  animated_text(green "\nfinal priorities with recommendations:\n" reset, 1);
+  int max_score = scores[0];
+  for (int i = 1; i < subject_count; i++) {
+    if (scores[i] > max_score)
+      max_score = scores[i];
+  }
+
+  double normalized_scores[MAX_SUBJECTS];
   for (int i = 0; i < subject_count; i++) {
-    printf(yellow "#%d %s (score = %d): " reset, i + 1, subjects[i], scores[i]);
-    if (scores[i] > 15) {
-      printf("highly recommended to focus on this subject. it is both upcoming "
-             "and challenging.\n");
-    } else if (scores[i] > 10) {
-      printf("recommended to revise. important but manageable.\n");
+    normalized_scores[i] = (double)scores[i] / max_score * 100.0;
+  }
+
+  printf("\nPriority Levels for Tomorrow:\n");
+  for (int i = 0; i < subject_count; i++) {
+    printf(GREEN "%s: " RESET, subjects[i]);
+    if (normalized_scores[i] > 75.0) {
+      printf(YELLOW "High Priority. Focus on mastering concepts, and ensure "
+                    "preparation is thorough.\n" RESET);
+    } else if (normalized_scores[i] > 50.0) {
+      printf(BLUE "Medium-High Priority. Consider spending additional time on "
+                  "practice and review.\n" RESET);
+    } else if (normalized_scores[i] > 25.0) {
+      printf(CYAN
+             "Medium-Low Priority. Quick revision will be sufficient.\n" RESET);
     } else {
-      printf("you seem comfortable with this. minimal effort required.\n");
+      printf(RED "Easy Priority. A light review to keep concepts fresh is "
+                 "recommended.\n" RESET);
     }
   }
 }
