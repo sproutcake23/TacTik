@@ -55,7 +55,7 @@ int main() {
     display_menu();
     printf("\n");
     printf(YELLOW "Your choice: " RESET);
-
+    scanf("%d", &choice);
     getchar();
 
     switch (choice) {
@@ -187,12 +187,12 @@ void print_welcome() {
   printf(CYAN);
 
   printf(" ");
-  center_text("      * WELCOME TO TOMORROW'S PRIORITY *     ");
+  center_text("      * WELCOME TO TACTIK *     ");
   center_text("=============================================");
 
   printf("\n");
   center_text(
-      "       Tomorrow's Priority is a thoughtfully designed tool "
+      "       TacTik is a thoughtfully designed tool "
       "crafted to help students take control of their study schedules. ");
   printf("\n ");
   center_text(" This innovative CLI-based program goes beyond just "
@@ -231,7 +231,7 @@ void display_menu() {
 
 // -------- Dislay the loading screen animation -----------
 void display_loading_screen() {
-  const char *loading_message = "Loading Tomorrow's Priority Application";
+  const char *loading_message = "Loading TacTik Application";
   const char *spinner = "|/-\\";
   int width = get_terminal_width();
   int bar_width = width - 20;
@@ -423,9 +423,9 @@ void prioritize_subjects(char timetable[MAX_DAYS][MAX_LINE_LENGTH], int days,
 void about_us() {
   printf("\n");
 
-  printf(CYAN "What is Tomorrow's Priority?\n" RESET);
+  printf(CYAN "What is TacTik?\n" RESET);
   printf(CYAN "===========================\n\n" RESET);
-  printf("Tomorrow's Priority is a thoughtfully designed tool crafted to help "
+  printf("TacTik is a thoughtfully designed tool crafted to help "
          "students take control of their study schedules. ");
   printf(
       "This innovative CLI-based program goes beyond just listing tomorrow's "
@@ -436,12 +436,12 @@ void about_us() {
          "prepared and focused on what matters most.\n\n");
   printf("With a sleek ASCII-art UI, engaging animations, and intelligent "
          "algorithms working behind the scenes, ");
-  printf("Tomorrow's Priority is more than just a tool—it's your smart study "
+  printf("TacTik is more than just a tool—it's your smart study "
          "companion.\n\n");
 
   printf(CYAN "Who is it Useful For?\n" RESET);
   printf(CYAN "=====================\n\n" RESET);
-  printf("Tomorrow's Priority is perfect for:\n");
+  printf("TacTik is perfect for:\n");
   printf("- " GREEN "Students" RESET
          " who want to stay ahead in their academics and make strategic use of "
          "their time.\n");
@@ -461,7 +461,7 @@ void about_us() {
   printf(CYAN "The Uses of Spaced Repetition and SMART Goals\n" RESET);
   printf(CYAN "============================================\n\n" RESET);
   printf("- " YELLOW "Spaced Repetition:" RESET
-         " Tomorrow's Priority integrates the principles of spaced repetition "
+         " TacTik integrates the principles of spaced repetition "
          "to evaluate subject focus. ");
   printf("It ensures subjects you haven't studied in recent days are given "
          "higher priority, creating natural and effective review intervals. ");
@@ -469,9 +469,8 @@ void about_us() {
   printf("- " YELLOW "SMART Goals:" RESET
          " The program aligns its recommendations with the principles of SMART "
          "(Specific, Measurable, Achievable, Relevant, Time-bound) goals. ");
-  printf(
-      "By identifying clear priorities for the next day and weighing the "
-      "difficulty levels, Tomorrow's Priority helps you achieve measurable ");
+  printf("By identifying clear priorities for the next day and weighing the "
+         "difficulty levels, TacTik helps you achieve measurable ");
   printf("and realistic progress while maintaining a focused and relevant "
          "approach to your studies.\n\n");
   printf("Together, these techniques bring science-backed study strategies to "
@@ -479,7 +478,7 @@ void about_us() {
 
   printf(CYAN "About the Team\n" RESET);
   printf(CYAN "==============\n\n" RESET);
-  printf("Tomorrow's Priority was developed with passion by a team dedicated "
+  printf("TacTik was developed with passion by a team dedicated "
          "to blending technology and education. ");
   printf("Driven by the desire to make learning both effective and engaging, "
          "the creators come from diverse backgrounds, ");
@@ -490,18 +489,17 @@ void about_us() {
   printf("Our goal is to inspire students to take control of their preparation "
          "process, feel less overwhelmed, and ultimately excel in their "
          "pursuits.\n\n");
-  printf("When we aren't busy improving Tomorrow's Priority, we're exploring "
+  printf("When we aren't busy improving TacTik, we're exploring "
          "ways to integrate modern AI and data-driven methodologies ");
   printf("to push the boundaries of educational tools further.\n\n");
-  printf(
-      "Let Tomorrow's Priority simplify your study process so you can focus on "
-      "success. Together, let's build a brighter and smarter tomorrow!\n\n");
+  printf("Let TacTik simplify your study process so you can focus on "
+         "success. Together, let's build a brighter and smarter tomorrow!\n\n");
 }
 
 // --------- Exit the Program Code -----------
 void exit_program() {
   display_loading_screen();
-  printf(GREEN "\nThank you for using Tomorrow's Priority!\n" RESET);
+  printf(GREEN "\nThank you for using TacTik!\n" RESET);
   printf("We hope it helps you manage your studies effectively. Have a great "
          "day ahead!\n");
   sleep(5);
