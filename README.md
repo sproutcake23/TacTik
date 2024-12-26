@@ -1,4 +1,4 @@
-# 📚 TakTic 🕛
+<h1 align="center">📚 TakTic 🕛 </h1>
 
 **A smart CLI-based study planner that helps students prioritize their subjects effectively**
 
